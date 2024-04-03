@@ -1,25 +1,25 @@
 import { store } from 'quasar/wrappers'
-import { createPinia } from 'pinia'
+import { defineStore } from 'pinia'
 
 
-export const useLoginStore = createPinia('login', {
-    state: () => ({}),
+export const useLoginStore = defineStore('login', {
+    state: () => ({ log : []}),
     getters: {
       doubleCount: (state) => state.count * 2,
     },
     actions: {
       registerUser(firstname,name, email, phone, password) {
-        store.state.login.firstname = firstname;
-        store.state.login.name = name;
-        store.state.login.email = email;
-        store.state.login.password = password;
-        store.state.login.phone = phone;
+        // i want to push the data to the state like firstname : 'firstname', name : 'name', email : 'email', phone : 'phone', password : 'password'
+        // For example if i want to get the firstname i will do store.state.login.firstname but if another one want to register then that push another data to the state
+        this.log.push({ firstname : firstname, name : name, email : email, phone : phone, password : password })
+        
+        
       },
         loginUser(emailphone, password) {
-            if ((store.state.login.email == emailphone || store.state.login.emailphone == phone) && store.state.login.password == password) {
-                return true;
+            if ((this.log.email == emailphone || this.log.emailphone == phone) && this.log.password == password) {
+                return true
             } else {
-                return false;
+                return false
             }
         },
 
