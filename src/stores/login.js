@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 
 export const useLoginStore = defineStore('login', {
-    state: () => ({ log : [ {firstname : 't', name : 't', email : 't', phone : 't', password : 't'}
+    state: () => ({ log : [ {firstname : 't', name : 't', email : 't', phone : 't', password : 't', role : 'RH'}
   ], currentUser: null }),
     getters: {
       doubleCount: (state) => state.count * 2,
@@ -12,7 +12,7 @@ export const useLoginStore = defineStore('login', {
       registerUser(firstname,name, email, phone, password) {
         // i want to push the data to the state like firstname : 'firstname', name : 'name', email : 'email', phone : 'phone', password : 'password'
         // For example if i want to get the firstname i will do store.state.login.firstname but if another one want to register then that push another data to the state
-        this.log.push({ firstname : firstname, name : name, email : email, phone : phone, password : password })
+        this.log.push({ firstname : firstname, name : name, email : email, phone : phone, password : password, role : 'RH'})
         
         
       },
@@ -25,7 +25,6 @@ export const useLoginStore = defineStore('login', {
           } 
           console.log('Login failed')
           return false 
-          
           })
         },
         logoutUser() {
