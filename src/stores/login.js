@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 
 export const useLoginStore = defineStore('login', {
-    state: () => ({ log : []}),
+    state: () => ({ log : [ {firstname : 't', name : 't', email : 't', phone : 't', password : 't'}]}),
     getters: {
       doubleCount: (state) => state.count * 2,
     },
@@ -18,12 +18,13 @@ export const useLoginStore = defineStore('login', {
         loginUser(emailphone, password) {
           this.log.forEach(element => {
             if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
+              console.log('Login success')
               return true
-          } else {
-              return false
-          }
-          });
-            
+          } 
+          console.log('Login failed')
+          return false 
+          
+          })
         },
 
     },

@@ -90,7 +90,8 @@
   }
   
   const loginU = () => {
-    store.loginUsers(emailOrPhone.value, password.value)
+    store.loginUser(emailOrPhone.value, password.value)
+
   }
   </script>
   
