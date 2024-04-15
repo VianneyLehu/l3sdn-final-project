@@ -16,11 +16,14 @@ export const useLoginStore = defineStore('login', {
         
       },
         loginUser(emailphone, password) {
-            if ((this.log.email == emailphone || this.log.emailphone == phone) && this.log.password == password) {
-                return true
-            } else {
-                return false
-            }
+          this.log.forEach(element => {
+            if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
+              return true
+          } else {
+              return false
+          }
+          });
+            
         },
 
     },
