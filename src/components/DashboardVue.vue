@@ -2,7 +2,7 @@
 <div id="q-app" style="min-height: 100vh;">
 <div class="q-pa-md row items-start q-gutter-md">
   
-  <q-card flat bordered class="my-card">
+  <q-card  v-if="curr_user.role == '1'" flat bordered class="my-card">
       <q-card-section>
         <div class="text-h6">Nombre de managés</div>
       </q-card-section>
@@ -13,11 +13,11 @@
 
       <q-separator inset />
 
-      <q-card-section>
+      <q-card-section>  
        
       </q-card-section>
     </q-card>
-    <q-card flat bordered class="my-card">
+    <q-card  v-if="curr_user.role == '0' || curr_user.role == '1'" flat bordered class="my-card">
       <q-card-section>
         <div class="text-h6">Prochain entretien</div>
       </q-card-section>
@@ -32,7 +32,7 @@
 
       </q-card-section>
     </q-card>
-    <q-card flat bordered class="my-card">
+    <q-card  v-if="curr_user.role == '2'" flat bordered class="my-card">
       <q-card-section>
         <div class="text-h6">Mon manager</div>
       </q-card-section>
@@ -47,7 +47,7 @@
 
       </q-card-section>
     </q-card>
-    <q-card flat bordered class="my-card">
+    <q-card  v-if="curr_user.role == '1' || curr_user.role == '2'" flat bordered class="my-card">
       <q-card-section>
         <div class="text-h6">Mon prochain entretien personnel</div>
       </q-card-section>
