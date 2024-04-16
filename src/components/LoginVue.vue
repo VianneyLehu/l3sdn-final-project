@@ -73,6 +73,8 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useLoginStore } from 'src/stores/login.js'
+
+  const router = useRouter()
   const store = useLoginStore ()
   const showLoginForm = ref(true)
   const emailOrPhone = ref('')
@@ -90,7 +92,10 @@
   }
   
   const loginU = () => {
-    store.loginUser(emailOrPhone.value, password.value)
+    if(store.loginUser(emailOrPhone.value, password.value)){
+      router.push('/dashboard')
+    }
+    
 
   }
   </script>

@@ -11,6 +11,18 @@ const routes = [
     path: '/login',
     component: () => import('src/components/LoginVue.vue'), // Change le composant ici
   },
+  {
+    path: '/dashboard',
+    component: () => import('src/components/DashboardVue.vue'), // Change le composant ici
+  },
+  {
+    path: '/manages',
+    component: () => import('src/components/ManagesVue.vue'), // Change le composant ici
+  },
+  {
+    path: '/entretiens',
+    component: () => import('src/components/EntretiensVue.vue'), // Change le composant ici
+  },
 
   {
     path: '/:catchAll(.*)*',
