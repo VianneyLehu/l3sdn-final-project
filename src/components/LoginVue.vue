@@ -93,6 +93,7 @@
   
   const loginU = () => {
     if(store.loginUser(emailOrPhone.value, password.value)){
+      console.log('test')
       router.push('/dashboard')
     }
     

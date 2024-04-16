@@ -1,6 +1,6 @@
 import { store } from 'quasar/wrappers'
 import { defineStore } from 'pinia'
-import { users } from '../data/users.json'
+import  users  from '../data/users.json'
 
 
 export const useLoginStore = defineStore('login', {
@@ -19,13 +19,13 @@ export const useLoginStore = defineStore('login', {
         
       },
         loginUser(emailphone, password) {
-          users.employees.forEach(element => {
+          for (const element of users.employees) { 
             if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
               console.log('Login success')
               this.currentUser = element
               return true
-          } 
-          })
+             } 
+          }
           console.log('Login failed')
           return false 
         },
