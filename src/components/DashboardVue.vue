@@ -16,21 +16,7 @@
       <q-card-section>  
        
       </q-card-section>
-    </q-card>
-    <q-card  v-if="curr_user.role == '0' || curr_user.role == '1'" flat bordered class="my-card">
-      <q-card-section>
-        <div class="text-h6">Prochain entretien</div>
-      </q-card-section>
 
-      <q-card-section class="q-pt-none">
-       
-      </q-card-section>
-
-      <q-separator inset />
-
-      <q-card-section>
-
-      </q-card-section>
     </q-card>
     <q-card  v-if="curr_user.role == '2'" flat bordered class="my-card">
       <q-card-section>
@@ -61,7 +47,43 @@
       <q-card-section>
 
       </q-card-section>
+
+
+
     </q-card>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <q-card class="fit no-shadow" bordered>
+      <q-card-section class="text-h6 q-pb-none">
+        <q-item>
+          <q-item-section avatar class="">
+            <q-icon color="blue" name="access_time" style="font-size: 2em;"/>
+          </q-item-section>
+
+          <q-item-section>
+            <div class="text-h6">Mes entretiens :</div>
+          </q-item-section>
+        </q-item>
+      </q-card-section>
+      <q-card-section class="">
+        <q-timeline layout="dense" side="alternate" color="secondary">
+
+          <q-timeline-entry
+            v-for="(entretien, index) in entretiens"
+            :key="index"
+            :title="entretien.description"
+            :subtitle="entretien.date + ' ' + entretien.time"
+            :color="orange"
+            icon="event"
+          >
+          <div>
+            <br>
+            Avec: {{ users[entretien.managedId-1].firstname}} {{users[entretien.managerId-1].lastname}}
+          </div>
+          </q-timeline-entry>
+        </q-timeline>
+      </q-card-section>
+    </q-card>
+  </div>
   </div>
 </div>
 
@@ -73,6 +95,8 @@
 <script setup>
 
 import  { useLoginStore } from '../stores/login.js'
+import entretiensData from '../data/entretiens.json'
+import users from '../data/users.json'
 import { ref } from 'vue'
 
 const store = useLoginStore()
@@ -80,7 +104,18 @@ const store = useLoginStore()
 const curr_user = store.getCurrentUser
 
 
-console.log(curr_user)
+
+const entretiens = ref([])
+
+
+for (const entretien of entretiensData) {
+  if (entretien.managerId === curr_user.id) {
+    entretiens.value.push(entretien)
+  }
+}
+
+console.log('entretiensData:', entretiensData)
+console.log('users:', users)
 
 </script>
 

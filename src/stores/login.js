@@ -15,11 +15,11 @@ export const useLoginStore = defineStore('login', {
 
         // i want to push the data to the state like firstname : 'firstname', name : 'name', email : 'email', phone : 'phone', password : 'password'
         // For example if i want to get the firstname i will do store.state.login.firstname but if another one want to register then that push another data to the state
-        users.employees.push({ firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '1', manage : [] })
+        users.push({ firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '1', manage : [] })
         
       },
         loginUser(emailphone, password) {
-          for (const element of users.employees) { 
+          for (const element of users) { 
             if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
               console.log('Login success')
               this.currentUser = element

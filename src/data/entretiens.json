@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "date": "2024-04-18",
+      "time": "10:00",
+      "description": "Performance review meeting",
+      "managerId": 3,
+      "managedId": 8
+    },
+    {
+      "id": 2,
+      "date": "2024-04-19",
+      "time": "14:30",
+      "description": "Project progress discussion",
+      "managerId": 3,
+      "managedId": 10
+    },
+    {
+      "id": 3,
+      "date": "2024-04-20",
+      "time": "11:00",
+      "description": "Training session",
+      "managerId": 2,
+      "managedId": 5
+    }
+  ]
+  
