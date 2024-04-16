@@ -22,6 +22,14 @@
       "description": "Training session",
       "managerId": 2,
       "managedId": 5
+    },
+    {
+      "id": 4,
+      "date": "2024-04-20",
+      "time": "11:00",
+      "description": "Training session",
+      "managerId": 1,
+      "managedId": 3
     }
   ]
   
