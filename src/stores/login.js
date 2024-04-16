@@ -6,6 +6,9 @@ import { users } from '../data/users.json'
 export const useLoginStore = defineStore('login', {
     state: () => ({ currentUser: null }),
     getters: {
+      getCurrentUser() {
+        return this.currentUser
+      }
     },
     actions: {
       registerUser(firstname,name, email, phone, password) {
@@ -22,7 +25,6 @@ export const useLoginStore = defineStore('login', {
               this.currentUser = element
               return true
           } 
-          
           })
           console.log('Login failed')
           return false 
