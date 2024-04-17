@@ -25,6 +25,11 @@ const routes = [
   },
 
   {
+    path: '/navbar',
+    component: () => import('src/components/NavbarVue.vue'),
+  },
+
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   }

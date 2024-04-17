@@ -82,7 +82,7 @@ export const useLoginStore = defineStore('login', {
 
       },
         loginUser(emailphone, password) {
-          for (const element of users.employees) { 
+          for (const element of users) { 
             if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
               console.log('Login success')
               this.currentUser = element
