@@ -17,7 +17,7 @@ const routes = [
   },
   {
     path: '/list',
-    component: () => import('src/components/ListVue.vue'), // Change le composant ici
+    component: () => import('src/components/ListeVue.vue'), // Change le composant ici
   },
   {
     path: '/entretiens',
