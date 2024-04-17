@@ -22,6 +22,8 @@
                 filled
                 label="Email or Phone"
                 lazy-rules
+                :rules="[val => !!val || 'This field is required']" 
+                :color="invalidField ? 'red' : ''" 
               />
 
               <q-input
@@ -30,6 +32,8 @@
                 filled
                 label="Password"
                 lazy-rules
+                :rules="[val => !!val || 'This field is required']" 
+                :color="invalidField ? 'red' : ''" 
               />
 
               <div>
@@ -38,6 +42,16 @@
             </q-form>
             <div>
               Don't have an account? <a href="#" @click="showLoginForm = false">Register</a>
+            </div>
+            <div>
+            <!-- Message d'erreur en cas d'authentification échouée -->
+            <q-dialog v-if="loginError" v-model="loginError">
+              <q-card>
+                <q-card-section class="text-center">
+                  <div class="text-h6">Mot de passe incorrect ou email</div>
+                </q-card-section>
+              </q-card>
+            </q-dialog> <!-- Fenêtre contextuelle en cas d'erreur -->
             </div>
           </q-card-section>
           <q-card-section v-else>
@@ -85,6 +99,7 @@
             <div>
               Already have an account? <a href="#" @click="showLoginForm = true">Login</a>
             </div>
+            
           </q-card-section>
         </q-card>
       </q-page>
@@ -108,6 +123,8 @@
   const registerFirstName = ref('')
   const registerLastName = ref('')
   const registerPassword = ref('')
+  const loginError = ref(false) // Définir une référence pour afficher la popup d'erreur
+  const invalidField = ref(false) 
 
   const registerU = () => {
     store.registerUser(registerFirstName.value, registerLastName.value, registerEmail.value, registerPhone.value, registerPassword.value)
@@ -115,10 +132,18 @@
   }
 
   const loginU = () => {
+    if (emailOrPhone.value && password.value) {
+
     if (store.loginUser(emailOrPhone.value, password.value)) {
       console.log('test')
       router.push('/dashboard')
+    }else {
+      loginError.value = true // Afficher la popup d'erreur
+      setTimeout(() => { loginError.value = false }, 2000) // Masquer la popup après 2 secondes
     }
+  } else {
+    invalidField.value = true // Marquer les champs non valides
+  }
   }
 
     
@@ -129,3 +154,5 @@
   background-image: linear-gradient(135deg, #7028e4 0%, #e5b2ca 100%);
 }
 </style>
+
+
