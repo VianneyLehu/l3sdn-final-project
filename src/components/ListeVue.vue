@@ -95,7 +95,7 @@ const newManager = ref({
 
 function saveNewManager() {
   
-  console.log(newManager.value.selectedManagerId.value)
+  //console.log(newManager.value.selectedManagerId.value)
   if (newManager.value.selectedManagerId==null){
       loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId)
   }
