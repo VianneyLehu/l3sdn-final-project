@@ -9,6 +9,7 @@
       </template>
     </q-input>
     <q-table
+      class="q-table__container--standard-center"
       :rows="filteredEmployees"
       :columns="columns"
       align="center"
@@ -95,8 +96,12 @@ const newManager = ref({
 function saveNewManager() {
   
   console.log(newManager.value.selectedManagerId.value)
-  
+  if (newManager.value.selectedManagerId==null){
+      loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId)
+  }
+  else{
   loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId.value)
+  }
   // Réinitialiser le formulaire et fermer le dialogue
   console.log('test')
   managedEmployees.value = loginStore.getManagedEmployees
