@@ -11,8 +11,21 @@ export const useLoginStore = defineStore('login', {
     getters: {
       getCurrentUser() {
         return this.currentUser
-      },
+      }
 
+      
+    
+    },
+    actions: {
+      getAllManagers(api) {
+        const managers = []
+        for (const employee of api) {
+          if (employee.role === 1) {
+            managers.push(employee)
+          }
+        }
+        return managers
+      },
       getManagedEmployees(api) {
         if (this.currentUser.role === 1) {
           const managedEmployees = []
@@ -39,17 +52,6 @@ export const useLoginStore = defineStore('login', {
         return managedEmployees
       }
     },
-    getAllManagers(api) {
-      const managers = []
-      for (const employee of api) {
-        if (employee.role === 1) {
-          managers.push(employee)
-        }
-      }
-      return managers
-    }
-    },
-    actions: {
 
       updateManagerManagedEmployees(manager, managedEmployee,api) {
 

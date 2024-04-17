@@ -66,9 +66,8 @@ import { ref } from 'vue'
 import { useLoginStore } from '../stores/login.js'
 import { onMounted } from 'vue'
 import { computed } from 'vue'
-
-
-
+import { api } from 'boot/axios'
+const data = ref([])
 const search = ref('')
 const loginStore = useLoginStore()
 const managedEmployees = ref([])
@@ -76,20 +75,25 @@ const currentUser = ref(loginStore.getCurrentUser)
 const editedManager = ref(null)
 const showEditDialog = ref(false)
 const showAddManagerDialog = ref(false)
-const managerList = ref([loginStore.getAllManagers])
-const data = ref([])
+
+
 
 onMounted(async () => {
     const result = await api.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
     data.value = result.data
   })
 
+const managerList = ref([loginStore.getAllManagers(data.value)])
 
 
 
 
 
-const managerOptions = loginStore.getAllManagers.map(manager => ({
+
+
+
+
+const managerOptions = loginStore.getAllManagers(data.value).map(manager => ({
   label: `${manager.firstname} ${manager.lastname}`,
   value: manager.id
 }))
@@ -109,14 +113,14 @@ function saveNewManager() {
   
   console.log(newManager.value.selectedManagerId.value)
   if (newManager.value.selectedManagerId==null){
-      loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId,data.value)
+      loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId, data.value)
   }
   else{
     loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId.value, data.value)
   }
   // Réinitialiser le formulaire et fermer le dialogue
   console.log('test')
-  managedEmployees.value = loginStore.getManagedEmployees
+  managedEmployees.value = loginStore.getManagedEmployees(data.value)
   newManager.value = {
     firstname: '',
     lastname: '',
@@ -144,9 +148,9 @@ function cancelAddManager() {
 // Filtre des employés en fonction de la recherche
 const filteredEmployees = computed(() => {
   if (!search.value) {
-    return loginStore.getManagedEmployees
+    return loginStore.getManagedEmployees(data.value)
   } else {
-    return loginStore.getManagedEmployees.filter(employee => {
+    return loginStore.getManagedEmployees(data.value).filter(employee => {
       return employee.firstname.toLowerCase().includes(search.value.toLowerCase()) ||
              employee.lastname.toLowerCase().includes(search.value.toLowerCase())
     })
@@ -168,7 +172,7 @@ function editManager(manager) {
 function saveManagerChanges() {
   loginStore.updateManager(editedManager.value,data.value)
   showEditDialog.value = false
-  managedEmployees.value = loginStore.getManagedEmployees
+  managedEmployees.value = loginStore.getManagedEmployees(data.value)
 }
 
 function cancelEdit() {
@@ -177,9 +181,9 @@ function cancelEdit() {
 }
 
 onMounted(async () => {
-  managedEmployees.value = await loginStore.getManagedEmployees
+  managedEmployees.value = await loginStore.getManagedEmployees(data.value)
   if (currentUser.value.role === 0) {
-    managerList.value = await loginStore.getAllManagers
+    managerList.value = await loginStore.getAllManagers(data.value)
   }
   console.log('managedEmployees:', managedEmployees.value)
 })
