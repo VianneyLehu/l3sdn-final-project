@@ -1,6 +1,9 @@
 import { store } from 'quasar/wrappers'
 import { defineStore } from 'pinia'
 import  users  from '../data/users.json'
+import { api } from 'boot/axios'
+
+
 
 
 export const useLoginStore = defineStore('login', {
@@ -10,13 +13,12 @@ export const useLoginStore = defineStore('login', {
         return this.currentUser
       },
 
-      getManagedEmployees() {
+      getManagedEmployees(api) {
         if (this.currentUser.role === 1) {
-        // Gérer les employés pour le manager
           const managedEmployees = []
           for (const employeeId of this.currentUser.manage) {
             console.log(employeeId)
-            const employee = users.find(emp => emp.id === employeeId)
+            const employee = api.find(emp => emp.id === employeeId)
             console.log(employee)
             if (employee) {
               console.log(employee)
@@ -28,7 +30,7 @@ export const useLoginStore = defineStore('login', {
         else if (this.currentUser.role === 0) {
           console.log('test')
           const managedEmployees = []
-          for (const employee of users) {
+          for (const employee of api) {
             if (employee.role === 2) {
               console.log(employee)
               managedEmployees.push(employee)
@@ -37,9 +39,9 @@ export const useLoginStore = defineStore('login', {
         return managedEmployees
       }
     },
-    getAllManagers() {
+    getAllManagers(api) {
       const managers = []
-      for (const employee of users) {
+      for (const employee of api) {
         if (employee.role === 1) {
           managers.push(employee)
         }
@@ -49,40 +51,40 @@ export const useLoginStore = defineStore('login', {
     },
     actions: {
 
-      updateManagerManagedEmployees(manager, managedEmployee) {
-        // Recherchez le manager à mettre à jour dans le fichier JSON
+      updateManagerManagedEmployees(manager, managedEmployee,api) {
+
         console.log('manager:',manager)
-        for (const employee of users) {
+        for (const employee of api) {
           if (employee.id === manager) {
             employee.manage.push(managedEmployee)
           }
         }
       },
-      updateManager(updatedManager) {
-        // Recherchez le manager à mettre à jour dans le fichier JSON
+      updateManager(updatedManager,api) {
+
         
-        const managerIndex = users.findIndex(emp => emp.id === updatedManager.id)
-        users[managerIndex] = updatedManager
+        const managerIndex = api.find(emp => emp.id === updatedManager.id)
+        api[managerIndex] = updatedManager
       },
-      registerUser(firstname,name, email, phone, password, selected) {
+      registerUser(firstname,name, email, phone, password, selected,api) {
         
         // Trouver le dernier ID dans le fichier JSON
-        const lastidplus1 = users[users.length - 1].id + 1
+        const lastidplus1 = api[api.length - 1].id + 1
 
-        // i want to push the data to the state like firstname : 'firstname', name : 'name', email : 'email', phone : 'phone', password : 'password'
-        // For example if i want to get the firstname i will do store.state.login.firstname but if another one want to register then that push another data to the state
+        
         if(selected == null) {
-          users.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
+          api.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
         }
+
         else {
           
-          users.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
-          this.updateManagerManagedEmployees(selected, lastidplus1)
+          api.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
+          this.updateManagerManagedEmployees(selected, lastidplus1,api)
         }
 
       },
-        loginUser(emailphone, password) {
-          for (const element of users) { 
+        loginUser(emailphone, password,api) {
+          for (const element of api) { 
             if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
               console.log('Login success')
               this.currentUser = element

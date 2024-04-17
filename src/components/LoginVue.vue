@@ -109,9 +109,10 @@
 
 <script setup>
   import { defineComponent } from 'vue'
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { useLoginStore } from 'src/stores/login.js'
+  import { api } from 'src/boot/axios.js'
 
   const router = useRouter()
   const store = useLoginStore ()
@@ -125,16 +126,22 @@
   const registerPassword = ref('')
   const loginError = ref(false) // Définir une référence pour afficher la popup d'erreur
   const invalidField = ref(false) 
+  const data = ref([])
+
+  onMounted(async () => {
+    const result = await api.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
+    data.value = result.data
+  })
 
   const registerU = () => {
-    store.registerUser(registerFirstName.value, registerLastName.value, registerEmail.value, registerPhone.value, registerPassword.value)
+    store.registerUser(registerFirstName.value, registerLastName.value, registerEmail.value, registerPhone.value, registerPassword.value, data.value)
     console.log(store.log)
   }
 
   const loginU = () => {
     if (emailOrPhone.value && password.value) {
 
-    if (store.loginUser(emailOrPhone.value, password.value)) {
+    if (store.loginUser(emailOrPhone.value, password.value,data.value)) {
       console.log('test')
       router.push('/dashboard')
     }else {

@@ -77,6 +77,17 @@ const editedManager = ref(null)
 const showEditDialog = ref(false)
 const showAddManagerDialog = ref(false)
 const managerList = ref([loginStore.getAllManagers])
+const data = ref([])
+
+onMounted(async () => {
+    const result = await api.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
+    data.value = result.data
+  })
+
+
+
+
+
 
 const managerOptions = loginStore.getAllManagers.map(manager => ({
   label: `${manager.firstname} ${manager.lastname}`,
@@ -94,13 +105,14 @@ const newManager = ref({
 })
 
 function saveNewManager() {
+  console.log()
   
-  //console.log(newManager.value.selectedManagerId.value)
+  console.log(newManager.value.selectedManagerId.value)
   if (newManager.value.selectedManagerId==null){
-      loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId)
+      loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId,data.value)
   }
   else{
-  loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId.value)
+    loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId.value, data.value)
   }
   // Réinitialiser le formulaire et fermer le dialogue
   console.log('test')
@@ -149,12 +161,12 @@ const columns = [
 ]
 
 function editManager(manager) {
-  editedManager.value = { ...manager }
+  editedManager.value = { ...manager, manage:[]}
   showEditDialog.value = true
 }
 
 function saveManagerChanges() {
-  loginStore.updateManager(editedManager.value)
+  loginStore.updateManager(editedManager.value,data.value)
   showEditDialog.value = false
   managedEmployees.value = loginStore.getManagedEmployees
 }
