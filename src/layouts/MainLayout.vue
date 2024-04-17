@@ -1,16 +1,16 @@
 <template>
   <div>
-    <NavBar /> <!-- Composant de la barre de navigation -->
-    <router-view /> <!-- Contenu de la page -->
+    <navbar></navbar> 
   </div>
 </template>
 
 <script>
-import NavBar from './components/NavBar.vue' // Importer le composant de la barre de navigation
+import Navbar from 'src/components/NavbarVue.vue' 
 
 export default {
+  name: 'MainLayout',
   components: {
-    NavBar // Enregistrer le composant pour pouvoir l'utiliser dans ce layout
+    Navbar 
   }
 }
 </script>

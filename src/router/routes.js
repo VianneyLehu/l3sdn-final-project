@@ -1,38 +1,24 @@
 const routes = [
   {
     path: '/',
-    component: () => import('src/components/LoginVue.vue'),
-
+    redirect: '/login'
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/login',
-    component: () => import('src/components/LoginVue.vue'), // Change le composant ici
+    component: () => import('src/components/LoginVue.vue')
   },
   {
     path: '/dashboard',
-    component: () => import('src/components/DashboardVue.vue'), // Change le composant ici
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('src/components/DashboardVue.vue') },
+      { path: '/entretiens', component: () => import('src/components/EntretiensVue.vue') },
+      { path: '/listes', component: () => import('src/components/ListeVue.vue') },
+      // Autres routes enfants du dashboard
+    ]
   },
-  {
-    path: '/list',
-    component: () => import('src/components/ListeVue.vue'), // Change le composant ici
-  },
-  {
-    path: '/entretiens',
-    component: () => import('src/components/EntretiensVue.vue'), // Change le composant ici
-  },
-
-  {
-    path: '/navbar',
-    component: () => import('src/components/NavbarVue.vue'),
-  },
-
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
-  }
+  // Cette route attrape toutes les URL qui ne correspondent à aucune des routes ci-dessus
+  { path: '/:catchAll(.*)*', redirect: '/login' }
 ]
 
 export default routes
