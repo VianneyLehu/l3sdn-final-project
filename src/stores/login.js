@@ -8,15 +8,78 @@ export const useLoginStore = defineStore('login', {
     getters: {
       getCurrentUser() {
         return this.currentUser
+      },
+
+      getManagedEmployees() {
+        if (this.currentUser.role === 1) {
+        // Gérer les employés pour le manager
+          const managedEmployees = []
+          for (const employeeId of this.currentUser.manage) {
+            console.log(employeeId)
+            const employee = users.employees.find(emp => emp.id === employeeId)
+            console.log(employee)
+            if (employee) {
+              console.log(employee)
+              managedEmployees.push(employee)
+            }
+          }
+          return managedEmployees
+        }
+        else if (this.currentUser.role === 0) {
+          console.log('test')
+          const managedEmployees = []
+          for (const employee of users.employees) {
+            if (employee.role === 2) {
+              console.log(employee)
+              managedEmployees.push(employee)
+            }
+        }
+        return managedEmployees
       }
     },
+    getAllManagers() {
+      const managers = []
+      for (const employee of users.employees) {
+        if (employee.role === 1) {
+          managers.push(employee)
+        }
+      }
+      return managers
+    }
+    },
     actions: {
-      registerUser(firstname,name, email, phone, password) {
+
+      updateManagerManagedEmployees(manager, managedEmployee) {
+        // Recherchez le manager à mettre à jour dans le fichier JSON
+        console.log('manager:',manager)
+        for (const employee of users.employees) {
+          if (employee.id === manager) {
+            employee.manage.push(managedEmployee)
+          }
+        }
+      },
+      updateManager(updatedManager) {
+        // Recherchez le manager à mettre à jour dans le fichier JSON
+        
+        const managerIndex = users.employees.findIndex(emp => emp.id === updatedManager.id)
+        users.employees[managerIndex] = updatedManager
+      },
+      registerUser(firstname,name, email, phone, password, selected) {
+        
+        // Trouver le dernier ID dans le fichier JSON
+        const lastidplus1 = users.employees[users.employees.length - 1].id + 1
 
         // i want to push the data to the state like firstname : 'firstname', name : 'name', email : 'email', phone : 'phone', password : 'password'
         // For example if i want to get the firstname i will do store.state.login.firstname but if another one want to register then that push another data to the state
-        users.employees.push({ firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '1', manage : [] })
-        
+        if(selected == null) {
+          users.employees.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
+        }
+        else {
+          
+          users.employees.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
+          this.updateManagerManagedEmployees(selected, lastidplus1)
+        }
+
       },
         loginUser(emailphone, password) {
           for (const element of users.employees) { 

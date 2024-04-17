@@ -16,8 +16,8 @@ const routes = [
     component: () => import('src/components/DashboardVue.vue'), // Change le composant ici
   },
   {
-    path: '/manages',
-    component: () => import('src/components/ManagesVue.vue'), // Change le composant ici
+    path: '/list',
+    component: () => import('src/components/ListVue.vue'), // Change le composant ici
   },
   {
     path: '/entretiens',
