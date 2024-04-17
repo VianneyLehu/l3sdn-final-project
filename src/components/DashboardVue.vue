@@ -121,7 +121,7 @@ const curr_user = store.getCurrentUser
 
 const entretiens = ref([])
 
-const manager = ref(usersData.find(user => user.id === curr_user.managerId))
+const manager = ref(users.find(user => user.id === curr_user.managerId))
 
 
 const entretiens_perso = ref(entretiensData.filter(entretien => entretien.managedId === curr_user.id))
