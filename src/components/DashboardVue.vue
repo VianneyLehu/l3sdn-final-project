@@ -136,7 +136,6 @@ const store = useLoginStore()
 
 const darkMode = DarkmodeStore()
 
-// Method to toggle dark mode
 const toggleDarkMode = () => {
   darkMode.toggleDarkMode
   console.log(darkMode.getDarkMode)
