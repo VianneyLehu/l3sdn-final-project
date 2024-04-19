@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Liste des Managés</h1>
-    <q-btn color="primary" label="Ajouter un Manager" @click="showAddManagerDialog = true" />
+    <q-btn color="primary" label="Ajouter un Managé" @click="showAddManagerDialog = true" />
     <q-input v-model="search" borderless dense debounce="300" color="primary"  placeholder="Rechercher..." class="q-mb-md"
     :class="{ 'q-focused': search, 'q-filled': search }">
       <template v-slot:append>
@@ -31,7 +31,7 @@
     <q-dialog v-model="showEditDialog">
       <q-card>
         <q-card-section>
-          <h2>Éditer Manager</h2>
+          <h2>Éditer Managé</h2>
           <q-input v-model="editedManager.firstname" outlined  label="Prénom"></q-input>
           <q-input v-model="editedManager.lastname" outlined  label="Nom"></q-input>
           <q-input v-model="editedManager.email" outlined  label="Nom"></q-input>
