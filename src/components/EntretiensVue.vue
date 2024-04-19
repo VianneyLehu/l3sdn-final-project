@@ -4,7 +4,7 @@
       <q-form @submit="createEntretien">
         <q-date v-model="date" label="Date" />
         <q-time v-model="time" label="Time" />
-        <q-select  v-model=" managedId" :options="managed" label="Manager" dense outlined />
+        <q-select  v-model="selectedManagedId" :options="managed" label="Managed" dense outlined />
         <q-input v-model="description" label="Description" />
         <q-btn type="submit" label="Create Entretien" />
       </q-form>
@@ -17,12 +17,12 @@
   import { useLoginStore } from '../stores/login.js'
   
   const store = useLoginStore()
-  
   const date = ref('')
   const time = ref('')
   const description = ref('')
   const data = ref([])
   const managed = ref([])
+  const selectedManagedId = ref([])
     // Fetch the managed users from the API on component mount
     onMounted(async () => {
     try {
@@ -35,7 +35,7 @@
         console.log(managedUsersData)
 
   
-         managed.value = managedUsersData.map(user => ({
+        managed.value = managedUsersData.map(user => ({
         label: `${user.firstname} ${user.lastname}`,
         value: user.id
         }))
@@ -53,7 +53,7 @@
       time: time.value,
       description: description.value,
       managerId: currentUser.id, // Assuming managerId is available in the currentUser object
-      managedId: null // Replace 5 with the actual ID of the user selected for the entretien
+      managedId: selectedManagedId.value.value
     }
   
     try {
