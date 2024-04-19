@@ -1,7 +1,6 @@
 <template>
 <div id="q-app" :class="{ 'q-dark': isDarkMode }" style="min-height: 100vh;">
 <div class="q-pa-md row items-start q-gutter-md">
-  <q-btn label="Toggle Dark Mode" @click="toggleDarkMode"  />
   <q-card  v-if="curr_user.role == '1'" flat bordered class="my-card">
       <q-card-section>
         <div class="text-h6">Nombre de managés</div>
@@ -23,7 +22,7 @@
           </q-item-section>
 
           <q-item-section>
-            <div class="text-h6">Mon prochain entretien personnel :</div>
+            <div class="text-h6">Mes entretiens :</div>
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -31,7 +30,7 @@
         <q-timeline layout="dense" side="alternate" color="secondary">
 
           <q-timeline-entry
-            v-for="(entretien, index) in entretiens_perso"
+            v-for="(entretien, index) in entretiens"
             :key="index"
             :color="orange"
             icon="event"
@@ -83,7 +82,7 @@
           </q-item-section>
 
           <q-item-section>
-            <div class="text-h6">Mes entretiens :</div>
+            <div class="text-h6">Mon prochain entretien personnel  :</div>
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -91,7 +90,7 @@
         <q-timeline layout="dense" side="alternate" color="secondary">
 
           <q-timeline-entry
-            v-for="(entretien, index) in entretiens"
+            v-for="(entretien, index) in entretiens_perso"
             :key="index"
             :color="orange"
             icon="event"
@@ -101,7 +100,7 @@
             <div class="row items-center no-wrap">
               <div class="col">
                 <div class="text-h6">{{ entretien.description }}</div>
-                <div class="text-subtitle2">Avec: {{ users[entretien.managedId-1].firstname}} {{users[entretien.managedId-1].lastname}}</div>
+                <div class="text-subtitle2">Avec: {{ users[entretien.managerId-1].firstname}} {{users[entretien.managerId-1].lastname}}</div>
                 <div class="text-subtitle2">Date: {{ entretien.date }} {{ entretien.time }}</div>
               </div>
 
@@ -125,15 +124,13 @@
 
 
 <script setup>
-
-import  { useLoginStore } from '../stores/login.js'
-import {DarkmodeStore} from '../stores/darkmode.js'
-import entretiensData from '../data/entretiens.json'
-import users from '../data/users.json'
-import { ref,computed } from 'vue'
+import { useLoginStore } from '../stores/login.js'
+import { DarkmodeStore } from '../stores/darkmode.js'
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
+import { data } from 'autoprefixer'
 
 const store = useLoginStore()
-
 const darkMode = DarkmodeStore()
 
 const toggleDarkMode = () => {
@@ -141,41 +138,50 @@ const toggleDarkMode = () => {
   console.log(darkMode.getDarkMode)
 }
 
-
 const curr_user = store.getCurrentUser
 
-
+const users = ref([])
 const entretiens = ref([])
+const manager = ref(null)
+const entretiens_perso = ref([])
+const entretiensdata = ref([])
 
-const manager = ref(users.find(user => user.id === curr_user.managerId))
+// Fetch entretiens data from the API on component mount
+onMounted(async () => {
+  try {
+    // Fetch entretiens data
+    const entretiensResponse = await axios.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/entretiens')
+    entretiensdata.value = entretiensResponse.data
 
+    // Fetch manager data
+    const dataresponse = await axios.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
+    users.value = dataresponse.data
 
-const entretiens_perso = ref(entretiensData.filter(entretien => entretien.managedId === curr_user.id))
+    // Filter personal entretiens
+    entretiens_perso.value = entretiensdata.value.filter(entretien => entretien.managedId === curr_user.id)
 
-
-for (const entretien of entretiensData) {
-  if (entretien.managerId === curr_user.id) {
-    entretiens.value.push(entretien)
+    console.log(entretiens_perso.value)
+  
+  for (const entretien of entretiensdata.value) {
+    if (entretien.managerId === curr_user.id) {
+      entretiens.value.push(entretien)
+    }
   }
-} 
-
-console.log('entretiensData:', entretiensData)
-console.log('users:', users)
-
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
 
 
+
+})
 </script>
 
-
 <style lang="sass" scoped>
-
 .dark-mode 
   background-color: #333
   color: #fff
-
 
 .my-card
   width: 100%
   max-width: 250px
 </style>
-  
