@@ -1,9 +1,9 @@
 <template>
     <div>
       <h2>Create New Entretien</h2>
-      <q-form @submit="createEntretien">
-        <q-date v-model="date" label="Date" />
-        <q-time v-model="time" label="Time" />
+      <q-form class="q-gutter-md" @submit="createEntretien">
+        <q-date v-model="date" label="Date" class="q-mb-md"/>
+        <q-time v-model="time" label="Time" class="q-mb-md" />
         <q-select  v-model="selectedManagedId" :options="managed" label="Managed" dense outlined />
         <q-input v-model="description" label="Description" />
         <q-btn type="submit" label="Create Entretien" />
@@ -80,4 +80,59 @@
 
   
   </script>
+  
+  <style scoped>
+  
+  div {
+    max-width: 400px; 
+    margin: 0 auto; 
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+h2{
+    text-align: center;
+  }
+
+  .q-form {
+    margin-top: 20px;
+  }
+  
+  .q-date,
+  .q-time,
+  .q-select,
+  .q-input {
+    margin-bottom: 15px;
+    margin-left: 14%;
+  }
+  
+  .q-btn {
+    margin-top: 20px;
+  }
+  
+  h2 {
+    margin-top: 0;
+  }
+  
+ 
+  
+  .q-field__control {
+    border-radius: 4px;
+    align-items: center;
+    
+  }
+  
+  .q-btn {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    margin: center;
+    width: 100%;
+
+
+  } 
+  
+  </style>
+  
   
