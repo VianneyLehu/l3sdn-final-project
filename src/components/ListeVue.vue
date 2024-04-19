@@ -68,6 +68,9 @@ import { onMounted } from 'vue'
 import { computed } from 'vue'
 import { api } from 'boot/axios'
 const data = ref([])
+
+
+
 const search = ref('')
 const loginStore = useLoginStore()
 const managedEmployees = ref([])
@@ -75,6 +78,7 @@ const currentUser = ref(loginStore.getCurrentUser)
 const editedManager = ref(null)
 const showEditDialog = ref(false)
 const showAddManagerDialog = ref(false)
+const managerOptions = ref([])
 
 
 
@@ -93,7 +97,7 @@ const managerList = ref([loginStore.getAllManagers(data.value)])
 
 
 
-const managerOptions = loginStore.getAllManagers(data.value).map(manager => ({
+managerOptions.value = loginStore.getAllManagers(data.value).map(manager => ({
   label: `${manager.firstname} ${manager.lastname}`,
   value: manager.id
 }))
@@ -108,7 +112,7 @@ const newManager = ref({
   selectedManagerId: null
 })
 
-function saveNewManager() {
+async function saveNewManager() {
   console.log()
   
   console.log(newManager.value.selectedManagerId.value)
