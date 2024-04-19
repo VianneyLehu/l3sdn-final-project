@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Liste des Managers</h1>
+    <h1>Liste des Managés</h1>
     <q-btn color="primary" label="Ajouter un Manager" @click="showAddManagerDialog = true" />
     <q-input v-model="search" borderless dense debounce="300" color="primary"  placeholder="Rechercher..." class="q-mb-md"
     :class="{ 'q-focused': search, 'q-filled': search }">
@@ -50,7 +50,7 @@
     <q-dialog v-model="showAddManagerDialog">
       <q-card>
         <q-card-section>
-          <h2>Ajouter un Manager</h2>
+          <h2>Ajouter un Managé</h2>
           <q-input v-model="newManager.firstname" outlined label="Prénom"></q-input>
           <q-input v-model="newManager.lastname" outlined label="Nom"></q-input>
           <q-select v-if="currentUser.role === 0" v-model="newManager.selectedManagerId" :options="managerOptions" label="Manager" dense outlined />
