@@ -19,6 +19,7 @@
         <q-tr :props="props">
           <q-td class="center">{{ props.row.firstname }}</q-td>
           <q-td class="center">{{ props.row.lastname }}</q-td>
+          
           <q-td class="center">
             <q-btn  color="primary" label="Éditer" @click="editManager(props.row)" ></q-btn>
           </q-td>
@@ -33,6 +34,11 @@
           <h2>Éditer Manager</h2>
           <q-input v-model="editedManager.firstname" outlined  label="Prénom"></q-input>
           <q-input v-model="editedManager.lastname" outlined  label="Nom"></q-input>
+          <q-input v-model="editedManager.email" outlined  label="Nom"></q-input>
+          <q-input v-model="editedManager.phone" outlined  label="Téléphone"></q-input>
+          <q-input v-model="editedManager.password" outlined  label="Téléphone"></q-input>
+
+
           <!-- Autres champs d'édition -->
         </q-card-section>
         <q-card-actions align="right">
@@ -85,6 +91,11 @@ const managerOptions = ref([])
 onMounted(async () => {
     const result = await api.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
     data.value = result.data
+
+    managerOptions.value = loginStore.getAllManagers(data.value).map(manager => ({
+    label: `${manager.firstname} ${manager.lastname}`,
+    value: manager.id
+}))
   })
 
 const managerList = ref([loginStore.getAllManagers(data.value)])
@@ -97,11 +108,39 @@ const managerList = ref([loginStore.getAllManagers(data.value)])
 
 
 
-managerOptions.value = loginStore.getAllManagers(data.value).map(manager => ({
-  label: `${manager.firstname} ${manager.lastname}`,
-  value: manager.id
-}))
 
+
+
+function updateManagerManagedEmployees(manager, managedEmployee,api) {
+
+  console.log('manager:',manager)
+  for (const employee of api) {
+    if (employee.id === manager) {
+      employee.manage.push(managedEmployee)
+    }
+  }
+}
+
+function registerUser(firstname,name, email, phone, password, selected,api) {
+        
+        // Trouver le dernier ID dans le fichier JSON
+        const lastidplus1 = api[api.length - 1].id + 1
+
+        const newUser= {id: lastidplus1, firstname : firstname, lastname : name, password : password,  role : '2',  phone : phone, email : email,  manage : [] }
+        if(selected == null) {
+          api.push(newUser)
+          console.log('api:',api)
+          updateManagerManagedEmployees(currentUser.value.id, lastidplus1,api)
+        }
+
+        else {
+          
+          api.push(newUser)
+          console.log('api:',api)
+          updateManagerManagedEmployees(selected, lastidplus1,api)
+        }
+
+}
 
 const newManager = ref({
   firstname: '',
@@ -113,15 +152,19 @@ const newManager = ref({
 })
 
 async function saveNewManager() {
-  console.log()
-  
-  console.log(newManager.value.selectedManagerId.value)
+  console.log('data', data.value)
+
   if (newManager.value.selectedManagerId==null){
-      loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId, data.value)
+    registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId, data.value)
   }
   else{
-    loginStore.registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId.value, data.value)
+    console.log(newManager.value.selectedManagerId.value)
+    registerUser(newManager.value.firstname, newManager.value.lastname, newManager.value.email, newManager.value.phone, newManager.value.password, newManager.value.selectedManagerId.value, data.value)
   }
+
+  const sanitizedData = JSON.parse(JSON.stringify(data.value))
+  
+  await api.put('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees', sanitizedData)
   // Réinitialiser le formulaire et fermer le dialogue
   console.log('test')
   managedEmployees.value = loginStore.getManagedEmployees(data.value)
@@ -133,7 +176,13 @@ async function saveNewManager() {
     password: '',
     selectedManagerId: null
   }
+ 
   showAddManagerDialog.value = false
+  const result = await api.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
+  data.value = result.data
+  managedEmployees.value = loginStore.getManagedEmployees(data.value)
+
+
 }
 
 function cancelAddManager() {
@@ -173,8 +222,16 @@ function editManager(manager) {
   showEditDialog.value = true
 }
 
-function saveManagerChanges() {
+async function saveManagerChanges() {
   loginStore.updateManager(editedManager.value,data.value)
+  const sanitizedData = JSON.parse(JSON.stringify(data.value))
+
+
+  api.put('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees', sanitizedData)
+
+  const result = await api.get('https://rod-apps-restis-api-01.azurewebsites.net/api/etienne/employees')
+  data.value = result.data
+
   showEditDialog.value = false
   managedEmployees.value = loginStore.getManagedEmployees(data.value)
 }

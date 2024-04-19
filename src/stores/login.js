@@ -41,50 +41,21 @@ export const useLoginStore = defineStore('login', {
           return managedEmployees
         }
         else if (this.currentUser.role === 0) {
-          console.log('test')
-          const managedEmployees = []
-          for (const employee of api) {
-            if (employee.role === 2) {
-              console.log(employee)
-              managedEmployees.push(employee)
-            }
+          
+              return api.filter(employee => employee.role !== 0 && employee.role !== 1)
+            
         }
         return managedEmployees
-      }
+      
     },
 
-      updateManagerManagedEmployees(manager, managedEmployee,api) {
-
-        console.log('manager:',manager)
-        for (const employee of api) {
-          if (employee.id === manager) {
-            employee.manage.push(managedEmployee)
-          }
-        }
-      },
       updateManager(updatedManager,api) {
 
         
-        const managerIndex = api.find(emp => emp.id === updatedManager.id)
+        const managerIndex = api.findIndex(emp => emp.id === updatedManager.id)
         api[managerIndex] = updatedManager
       },
-      registerUser(firstname,name, email, phone, password, selected,api) {
-        
-        // Trouver le dernier ID dans le fichier JSON
-        const lastidplus1 = api[api.length - 1].id + 1
-
-        
-        if(selected == null) {
-          api.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
-        }
-
-        else {
-          
-          api.push({id: lastidplus1, firstname : firstname, lastname : name, email : email, phone : phone, password : password, role : '2', manage : [] })
-          this.updateManagerManagedEmployees(selected, lastidplus1,api)
-        }
-
-      },
+      
         loginUser(emailphone, password,api) {
           for (const element of api) { 
             if ((element.email == emailphone || element.phone == emailphone) && element.password == password) {
