@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" :dark="darkMode">
-    <q-header elevated :class="darkMode ? 'bg-dark text-white' : 'bg-grey-9 text-black'">
+    <q-header elevated :class="darkMode ? 'bg-dark text-white' : 'text-black'" style="background-color:lightgrey">
       <q-toolbar>
         <q-btn
           flat
@@ -8,10 +8,12 @@
           round
           aria-label="Menu"
           icon="menu"
-          color="black"
+          :icon-color="darkMode ? 'white' : 'black'"
           @click="drawer = !drawer" 
+          
+          
         />
-        <q-toolbar-title class="menu"  >
+        <q-toolbar-title class="menu" :class="darkMode ? 'text-white' : 'text-black'" >
           Menu
         </q-toolbar-title>
         <q-space/>
@@ -117,6 +119,7 @@ export default {
 .bg-grey-9 {
   background-color: #f9f9f9; 
 }
+
 
 
 </style>
