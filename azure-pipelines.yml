@@ -7,18 +7,11 @@ pool:
 steps:
 
 
-- script : cp package.json .
-  displayName: 'copy package json'
-
 - script: npm install
   displayName: 'install dependencies'
 
-- script : cp ..
-  displayName: 'copy all files'
-
 - script: npm run build
   displayName: 'Build'
-
 
 
 - task: Docker@2
