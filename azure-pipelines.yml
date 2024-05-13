@@ -13,13 +13,21 @@ steps:
 - script: npm run build
   displayName: 'Build'
 
+- script: docker login -u l3sdn -p $(password) rodacr01.azurecr.io
+  displayName: 'login'
 
-- task: Docker@2
-  displayName: 'Build and push an image to container registry'
-  inputs:
-    containerRegistry: 'rodacr01.azurecr.io'
-    repository: 'VianneyLehu/l3sdn-final-project'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    tags: 'latest'
-    buildContext: '$(Build.SourcesDirectory)'
+- script: docker build -t rodacr01.azurecr.io/lehu .
+  displayName: 'build'
+
+- script: docker push rodacr01.azurecr.io/lehu
+  displayName: 'push'
+
+# - task: Docker@2
+#   displayName: 'Build and push an image to container registry'
+#   inputs:
+#     containerRegistry: 'rodacr01.azurecr.io'
+#     repository: 'VianneyLehu/l3sdn-final-project'
+#     command: 'buildAndPush'
+#     Dockerfile: '**/Dockerfile'
+#     tags: 'latest'
+#     buildContext: '$(Build.SourcesDirectory)'
