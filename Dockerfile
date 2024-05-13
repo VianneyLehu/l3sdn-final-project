@@ -5,3 +5,5 @@ FROM socialengine/nginx-spa:latest
 WORKDIR /app
 COPY package.json .
 COPY . .
+
+EXPOSE 8080
