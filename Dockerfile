@@ -4,6 +4,6 @@ FROM socialengine/nginx-spa:latest
 
 WORKDIR /app
 COPY package.json .
-COPY . .
+COPY dist/spa
 
 EXPOSE 8080
