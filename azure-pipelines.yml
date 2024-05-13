@@ -19,7 +19,7 @@ steps:
 - script: docker build -t rodacr01.azurecr.io/lehu .
   displayName: 'build'
 
-- script: docker push rodacr01.azurecr.io/lehu
+- script: docker push rodacr01.azurecr.io/lehu  
   displayName: 'push'
 
 # - task: Docker@2
